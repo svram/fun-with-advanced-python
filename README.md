@@ -4,8 +4,8 @@ This repository contains scripts demonstrating some of the more 'advanced' featu
 
 If you can understand the following, you're good to start with the scripts in this repo: 
 
-[code language="python"]
+~~~~
 import os, random
 for i in xrange(random.randInt(12)):
 	print i
-[/code]
+~~~~
