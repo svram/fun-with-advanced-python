@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#!/usr/bin/env python
 '''
 	Simple demo with the argparse module
 
@@ -5,6 +7,8 @@
 		   the function get_args(): 
 
 		   $ python arg_demo.py -h
+
+		   © 2017 Vikram Bahl
 '''
 
 import argparse
