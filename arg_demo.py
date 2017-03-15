@@ -7,8 +7,8 @@
 		   the function get_args(): 
 
 		   $ python arg_demo.py -h
-
-		   © 2017 Vikram Bahl
+	
+	© 2017 Vikram Bahl
 '''
 
 import argparse
