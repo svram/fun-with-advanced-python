@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
 '''
-	Simple demo of how local scope works in python
+	Simple demo of how local and global scope works in python
 	
 	Usage: Open the command line and type:
 		$ python scope_demo_localScopy.py
@@ -38,6 +38,20 @@ def access_local_variable_before_definition(a):
 	x = 2000
 	print "x = {}".format(x)
 	print "a = {}".format(a)
+
+def global_scope(a):
+	global x
+	print "x = {}".format(x)
+	x = "X has changed"
+	print "x = {}".format(x)
+	print "a = {}".format(a)
+
+def global_vs_local(a, b):
+	global x
+	print "x = {}".format(x)
+	print "a = {}".format(a)
+	b = "New Value for B"
+	print "b = {}".format(b)
 
 	
 
@@ -99,3 +113,29 @@ if __name__ == '__main__':
 	access_local_variable_before_definition(200)
 	print "x = {}".format(x)
 
+	print("----------------------------")
+
+	'''
+		Lets look at the global scope. In the function global_scope(a), we use the 'global' keyword to tell the interpretor
+		to use the value of x defined outside the function. x=25 before the function was called. However, we assigned x = "X has changed"
+		within the function. This changed the value of the global x. This is seen by the print statement after the function is called.
+
+		DO NOTE THAT IT IS NOT PYTHONIC TO CHANGE THE VALUE OF A GLOBAL VARIABLE INSIDE A FUNCTION AS IT MAKES DEBUGGING HARDER
+	'''
+
+	x = 25
+	global_scope(200)
+	print "x = {}".format(x)
+
+	print("----------------------------")
+
+	'''
+		This example lets us see the difference between global and local variables. Note that b is a global variable
+		outside the global_vs_local function but is a local variable within the function. Thats why its value doesnt change 
+		in the print statemtn after the function is called
+	'''
+	x = 1000
+	b = 2500
+	global_vs_local(200, 2500)
+	print "x = {}".format(x)
+	print "b = {}".format(b)
