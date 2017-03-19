@@ -3,7 +3,7 @@
 '''
 	Web scraping demo. 
 
-	Note: make sure to create a virtualenv and run:
+	Note: make sure to create a virtualenv and run if you haven't done so:
 		$ pip install -r requirements.txt
 	
 	This demo uses the requests and BeautifulSoup libraries
@@ -11,7 +11,6 @@
 	We will scrape the front page of Hacker News, collect all the 
 	links and their text and output them in our very own HTML file. 
 
-	Usage: 
 	
 	© 2017 Vikram Bahl
 '''
@@ -21,12 +20,12 @@ from bs4 import BeautifulSoup
 
 URL = 'https://news.ycombinator.com/'
 
-def test_scraping():
-	request = requests.get(URL)
-	html = request.text
-	soup = BeautifulSoup(html, 'html.parser')
+def storeLinksToHTMLFile(allHeadlines):
+	
+	#the htmlString variable will contain the list of links and the link text
 	htmlString = ""
-	for link in soup.find_all(attrs={"class":"storylink"}):
+
+	for link in allHeadlines:
 		#print type(link["href"])
 		htmlString += "<a href={}>{}</a><br>".format(link["href"].encode('utf-8'), link.text.encode('utf-8'))
 		#print link.text
@@ -42,9 +41,6 @@ def get_all_links():
 
 	#Iniitialise bs4 with html.parser
 	soup = BeautifulSoup(html, 'html.parser')
-	
-	#the htmlString variable will contain the list of links and the link text
-	htmlString = ""
 
 	'''
 		Now we are going to learn some basics of the  BeautifulSoup library.
@@ -58,19 +54,69 @@ def get_all_links():
 	print soup.prettify()
 
 	#prints the <title> element
+	print "<title> element\n"
 	print soup.title
+	print "\n--------------------\n"
+
 	#print the first <a> element
+	print "<a> element\n"
 	print soup.a
-	#prints the first h1 element
-	print soup.h1
+	print "\n--------------------\n"
+
+	#prints the first tr element
+	print "<tr> element\n"
+	print soup.tr
+	print "\n--------------------\n"
+
 	#prints the first <form> element
+	print "<form> element\n"
 	print soup.form
+	print "\n--------------------\n"
+
+	'''
+	This is fine and well. But usually we will want to scrape a webpage for  the links or 
+	all the images or a subset of all images having a particular id or belonging to a particular class.
+
+	And so this is what we will do. Lets scrape the front page of hacker news and grab the all links which
+	are headlines and the headline text.
+	'''
+
+	#the find_all() function gets all elements with a certain tag or attributes. 
+	#check out this link for all filters: https://www.crummy.com/software/BeautifulSoup/bs4/doc/#searching-the-tree
+
+	#return a list of all <a>
+	print "LIST OF ALL <a> tags in the soup"
+	print soup.find_all('a')
+	print "\n--------------------\n"
+
+	'''
+		But we dont really want ALL links. we want links which point to a headline on the front page.
+		This is where am hoping you know how to use the Inspect function on google chrome. 
+		Basically, the links which point to a headline all belong to the class 'storylink'. 
+		The find_all(attrs={"class":"storylink"}) will do that for us.
+
+	 '''
+
+	print "LIST OF ALL <a> tags pointing to a headline"
+	allHeadlines = soup.find_all(attrs={"class":"storylink"})
+	print allHeadlines
+	print "\n--------------------\n"
+
+	#lets see what is the class type of a link from this soup
+	print type(soup.find('a'))
+	print "\n--------------------\n"
+
+	#It is a <class 'bs4.element.Tag'>. Hmm thats now a string. We extract the url and text from the headline by accessing
+	#the href attribute and text attribute using link['href'] and link.text
+
+	for link in allHeadlines:
+		print "{}\n{}\n\n".format(link.text.encode('utf-8'), link["href"].encode('utf-8'))
+
+	#you can go one step further and store all scraped results in your own HTML file. the possibilities are endless. 
+	#Uncomment below to see store all links to HTML file
+	#storeLinksToHTMLFile(allHeadlines)
 
 	
-
-
-
-
 
 if __name__ == '__main__':
 	#test_scraping()
