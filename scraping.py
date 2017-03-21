@@ -28,11 +28,8 @@ def storeLinksToHTMLFile(allHeadlines):
 	htmlString = ""
 
 	for link in allHeadlines:
-		#print type(link["href"])
 		htmlString += "<a href={}>{}</a><br>".format(link["href"].encode('utf-8'), link.text.encode('utf-8'))
-		#print link.text
-		#print link["href"]
-	#print htmlString
+		
 	with open("test.html", 'w+') as f:
 		f.write(htmlString)
 
