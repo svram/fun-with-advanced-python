@@ -3,10 +3,12 @@
 '''
 	Web scraping demo. 
 
-	Note: make sure to create a virtualenv and run if you haven't done so:
+	Note: make sure to create a virtualenv and run(if you haven't done so):
 		$ pip install -r requirements.txt
 	
-	This demo uses the requests and BeautifulSoup libraries
+	This demo uses the following libraries:
+		- requests
+		- BeautifulSoup
 
 	We will scrape the front page of Hacker News, collect all the 
 	links and their text and output them in our very own HTML file. 
@@ -91,7 +93,7 @@ def get_all_links():
 
 	'''
 		But we dont really want ALL links. we want links which point to a headline on the front page.
-		This is where am hoping you know how to use the Inspect function on google chrome. 
+		This is where am hoping you know how to use the developer tools on your browser('Inspect' in Google Chrome). 
 		Basically, the links which point to a headline all belong to the class 'storylink'. 
 		The find_all(attrs={"class":"storylink"}) will do that for us.
 
@@ -106,7 +108,7 @@ def get_all_links():
 	print type(soup.find('a'))
 	print "\n--------------------\n"
 
-	#It is a <class 'bs4.element.Tag'>. Hmm thats now a string. We extract the url and text from the headline by accessing
+	#It is a <class 'bs4.element.Tag'>. Hmm that's NOT a string. We extract the url and text from the headline by accessing
 	#the href attribute and text attribute using link['href'] and link.text
 
 	for link in allHeadlines:
@@ -119,5 +121,5 @@ def get_all_links():
 	
 
 if __name__ == '__main__':
-	#test_scraping()
+	#starting point
 	get_all_links()
