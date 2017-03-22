@@ -35,7 +35,7 @@ def get_args():
 
 	'''
 	Lets create a mutually exclusive group for 2 arguments -position and -momentum.
-	This means that the program will throw an error if both -yin and -yang options are provided as input.
+	This means that the program will throw an error if both -position and -momentum options are provided as input.
 	Possible use case: Let's say we are modelling Heisenbergs principle. We cannot provide a position AND momentum
 					   for an atomic particle at the same time as it would be a violation of the principle
 	'''
