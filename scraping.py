@@ -33,22 +33,31 @@ def storeLinksToHTMLFile(allHeadlines):
 	with open("test.html", 'w+') as f:
 		f.write(htmlString)
 
-def scrape_N_pages(url):
+def scrape_N_pages(url, N):
 	#make a GET request & grab the HTML text
 	request = requests.get(url)
 	html = request.text
 
 	#Iniitialise bs4 with html.parser
 	soup = BeautifulSoup(html, 'html.parser')
+	
 	headlines = soup.find_all(attrs={"class":"storylink"})
 
+	#find the <a> selector with class "morelink". Make sure that you know if there is more than one element with the class "morelink"...
+	#...and improvise accordingly.
+	nextlink = soup.find_all(attrs={"class":"morelink"})
+	#as of March '17, there is only once selector with the class "morelink"
+	next_resource = nextlink[0]
+	
 	for link in headlines:
-		if link.text.encode('utf-8') == "More":
-			new_url = URL + link["href"].encode('utf-8')
-			if int(new_url[-1]) >=100:
-				return
-			scrape_N_pages(new_url)
 		print link.text
+	
+	#grab the last character of news?p=2 and check if its not greater than N
+	if int((next_resource["href"])[-1]) > N:
+		return
+	new_url = URL + next_resource["href"]
+	#recurse away. beware of stack overflow!!
+	scrape_N_pages(new_url)
 
 
 def get_all_links():
@@ -137,5 +146,11 @@ def get_all_links():
 
 if __name__ == '__main__':
 	#starting point
-	#get_all_links()
-	scrape_N_pages(URL)
+	get_all_links()
+
+	"""
+		Uncomment below to see run the code which scrapes the first 10 pages of HN headlines.
+		Trick: Finding out the class of the "More" link, grabbing the relative url, appending it to the base url and using recursion to scrape N
+		pages. But when to stop scraping? Luckily, the relative url of the "More" link is structured as "news?p=2", where 2 is a reference to get the 2nd page
+	"""
+	#scrape_N_pages(URL, 10)
