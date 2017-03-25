@@ -33,6 +33,24 @@ def storeLinksToHTMLFile(allHeadlines):
 	with open("test.html", 'w+') as f:
 		f.write(htmlString)
 
+def scrape_N_pages(url):
+	#make a GET request & grab the HTML text
+	request = requests.get(url)
+	html = request.text
+
+	#Iniitialise bs4 with html.parser
+	soup = BeautifulSoup(html, 'html.parser')
+	headlines = soup.find_all(attrs={"class":"storylink"})
+
+	for link in headlines:
+		if link.text.encode('utf-8') == "More":
+			new_url = URL + link["href"].encode('utf-8')
+			if int(new_url[-1]) >=100:
+				return
+			scrape_N_pages(new_url)
+		print link.text
+
+
 def get_all_links():
 	#make a GET request & grab the HTML text
 	request = requests.get(URL)
@@ -119,4 +137,5 @@ def get_all_links():
 
 if __name__ == '__main__':
 	#starting point
-	get_all_links()
+	#get_all_links()
+	scrape_N_pages(URL)
