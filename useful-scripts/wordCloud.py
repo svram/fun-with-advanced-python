@@ -22,12 +22,15 @@
 
 	We will be using a dictionary to store our "word:frequency" relationship.
 
-	INPUT: URL of page we want to create a word clud of
-	OUTPUT: HTML file with word cloud
+	INPUT: URL of page we want to create a word cloud of
+	OUTPUT: dictionary mapping word to its frequency
 
 	CONSTRAINTS: For now, we will pass the class name of the main block of text we want to make a word cloud of. 
 				 In the future, we will get into figuring out which is likely to be the main body of text in an article.
 	
+	BONUS: Read through the code and you will notice that the create_word_cloud() and sanitize_text() functions
+	are general purpose and can be used in other programs.
+
 	© 2017 Vikram Bahl
 
 '''
@@ -40,9 +43,13 @@ def generate_word_cloud(URL, classname):
 	
 	mainBodyText = retrieve_main_body_of_text(URL, classname)
 	sanitized_text = sanitize_text(mainBodyText)
-	#word_cloud = create_word_cloud(sanitized_text)
+	word_cloud = create_word_cloud(sanitized_text)
 
-	#return word_cloud
+	return word_cloud
+
+def generate_word_cloud_from_corpus(corpus):
+	cleaned_corpus = sanitize_text(corpus)
+	return create_word_cloud(cleaned_corpus)
 
 def retrieve_main_body_of_text(URL, classname):
 	#we extract the text from the page using beautiful soup library.
@@ -65,6 +72,15 @@ def retrieve_main_body_of_text(URL, classname):
 def create_word_cloud(corpus):
 	corpus_split_by_space = corpus.split(" ")
 	word_cloud = {}
+	for word in corpus_split_by_space:
+		word = word.lower()
+		if word in word_cloud:
+			word_count = word_cloud[word]
+			word_cloud[word] = (word_count + 1)
+		else:
+			word_cloud[word] = 1
+	print word_cloud
+	return word_cloud
 
 def sanitize_text(corpus):
 	corpus = str(corpus.encode('utf-8'))
@@ -76,19 +92,33 @@ def sanitize_text(corpus):
 	#lets tackle the punctuation now.Hmm how about we make a list of disallowed punctuation and iterate over it to get rid of each of them
 	#What is the time complexity? Is there a better way to do this? Would iterating over every character be faster? 
 
+	# UPDATE: iterating over every character once IS FAST. Iterating over every punctuation character is slow -> O(n^2)
+
 	#approach 1 - iterating over every punctuation
-	punctuation = [".", ",", "?", "$", "#", "@", "%", "!", "(", ")", '“', "”", ":", ";"]
+	'''punctuation = [".", ",", "?", "$", "#", "@", "%", "!", "(", ")", '“', "”", ":", ";"]
 
 	for p in punctuation:
-		corpus = " ".join(corpus.split(p))
+		corpus = " ".join(corpus.split(p))'''
 	
 	#approach 2: Lets iterate over every character once. If it is a punctuation, we skipt it till we land upon a valid character. 
 	#Then we add a single space before adding the valid character.
 
-	
-	
+	#lets make a corpus of valid characters
+	valid_characters = []
+	for i in xrange(ord('a'), ord('z') + 1):
+		valid_characters.append(chr(i))
+		valid_characters.append(chr(i).upper())
 
-	return corpus
+	allowed_punctuation = ["-", "_", "'", " "]
+	valid_characters += allowed_punctuation
+
+	cleaned_corpus = ""
+	for i, character in enumerate(corpus):
+		if character in valid_characters:
+			cleaned_corpus += character
+
+	
+	return cleaned_corpus
 
 
 
