@@ -34,14 +34,15 @@
 
 from bs4 import BeautifulSoup
 import requests
+import re
 
 def generate_word_cloud(URL, classname):
 	
 	mainBodyText = retrieve_main_body_of_text(URL, classname)
 	sanitized_text = sanitize_text(mainBodyText)
-	word_cloud = create_word_cloud(sanitized_text)
+	#word_cloud = create_word_cloud(sanitized_text)
 
-	return word_cloud
+	#return word_cloud
 
 def retrieve_main_body_of_text(URL, classname):
 	#we extract the text from the page using beautiful soup library.
@@ -62,11 +63,34 @@ def retrieve_main_body_of_text(URL, classname):
 
 
 def create_word_cloud(corpus):
-	pass
+	corpus_split_by_space = corpus.split(" ")
+	word_cloud = {}
 
 def sanitize_text(corpus):
-	corpus = str(corpus)
+	corpus = str(corpus.encode('utf-8'))
+
+	#You can use regex (re.split("\s+")) here as well to strip the text of multiple whitespace but since python has a method already, we're using it
+	corpus_without_extra_whitespace = " ".join(corpus.split())
+	corpus = corpus_without_extra_whitespace
+
+	#lets tackle the punctuation now.Hmm how about we make a list of disallowed punctuation and iterate over it to get rid of each of them
+	#What is the time complexity? Is there a better way to do this? Would iterating over every character be faster? 
+
+	#approach 1 - iterating over every punctuation
+	punctuation = [".", ",", "?", "$", "#", "@", "%", "!", "(", ")", '“', "”", ":", ";"]
+
+	for p in punctuation:
+		corpus = " ".join(corpus.split(p))
 	
+	#approach 2: Lets iterate over every character once. If it is a punctuation, we skipt it till we land upon a valid character. 
+	#Then we add a single space before adding the valid character.
+
+	
+	
+
+	return corpus
+
+
 
 if __name__ == "__main__":
 	URL = "https://amp.theguardian.com//technology/2017/mar/30/lastpass-warns-users-to-exercise-caution-while-it-fixes-major-vulnerability"
