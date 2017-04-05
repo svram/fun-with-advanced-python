@@ -4,7 +4,7 @@
 	Simple demo of how local and global scope works in python
 	
 	Usage: Open the command line and type:
-		$ python scope_demo_localScopy.py
+		$ python scope.py
 	Then follow the output along with the code comments to understand what's going on
 	
 	© 2017 Vikram Bahl
