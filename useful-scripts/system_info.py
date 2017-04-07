@@ -8,3 +8,9 @@
 '''
 
 import os, sys, platform
+
+def get_machine_info():
+	print platform.machine()
+
+if __name__ == '__main__':
+	get_machine_info()
